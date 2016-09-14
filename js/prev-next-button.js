@@ -168,6 +168,12 @@ PrevNextButton.prototype.onTap = function() {
   }
   this.parent.uiChange();
   var method = this.isPrevious ? 'previous' : 'next';
+  if ( this.parent.options.contain || !this.parent.options.wrapAround || this.parent.cells.length || this.parent.boundLastSlide !== null ) {
+    if ( this.parent.selectedIndex > this.parent.boundLastSlide ) {
+      this.parent.selectedIndex = this.parent.boundLastSlide;
+    }
+  }
+
   this.parent[ method ]();
 };
 

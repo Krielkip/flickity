@@ -132,6 +132,7 @@ Flickity.prototype._create = function() {
   this.viewport = document.createElement('div');
   this.viewport.className = 'flickity-viewport';
   Flickity.setUnselectable( this.viewport );
+  this.boundLastSlide = null;
   this._createSlider();
 
   if ( this.options.resize || this.options.watchCSS ) {
@@ -386,6 +387,7 @@ Flickity.prototype._containCells = function() {
   // content is less than gallery size
   var isContentSmaller = contentWidth < this.size.innerWidth;
   // contain each cell target
+  this.boundLastSlide = null;
   for ( var i=0, len = this.cells.length; i < len; i++ ) {
     var cell = this.cells[i];
     // reset default target
@@ -397,6 +399,16 @@ Flickity.prototype._containCells = function() {
       // contain to bounds
       cell.target = Math.max( cell.target, this.cursorPosition + firstCellStartMargin );
       cell.target = Math.min( cell.target, endLimit );
+
+      if ( cell.target == endLimit) {
+        var slideIndex = this.cells.indexOf(cell);
+        if  (this.boundLastSlide === null )  {
+          this.boundLastSlide = slideIndex;
+        }
+        else if ( this.boundLastSlide > slideIndex ) {
+          this.boundLastSlide = slideIndex;
+        }
+      }
     }
   }
 };

@@ -4028,9 +4028,20 @@ PrevNextButton.prototype.update = function() {
     this.enable();
     return;
   }
-  var lastIndex = cells.length ? cells.length - 1 : 0;
-  var boundIndex = this.isPrevious ? 0 : lastIndex;
-  var method = this.parent.selectedIndex == boundIndex ? 'disable' : 'enable';
+  if ( this.parent.options.contain || !this.parent.options.wrapAround || this.parent.cells.length || this.parent.boundLastSlide != null ) {
+    var lastIndex = this.parent.boundLastSlide;
+    if ( this.isPrevious ) {
+      var method = this.parent.selectedIndex == 0 ? 'disable' : 'enable';
+    }
+    else {
+      var method = this.parent.selectedIndex >= lastIndex ? 'disable' : 'enable';
+    }
+  }
+  else {
+    var lastIndex = cells.length ? cells.length - 1 : 0;
+    var boundIndex = this.isPrevious ? 0 : lastIndex;
+    var method = this.parent.selectedIndex == boundIndex ? 'disable' : 'enable';
+  }
   this[ method ]();
 };
 
